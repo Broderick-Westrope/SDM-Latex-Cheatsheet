@@ -3,6 +3,7 @@
 \usepackage{sectsty}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{mathtools}
 \newcommand*{\bfrac}[2]{\genfrac{}{}{0pt}{}{#1}{#2}}
 \usepackage{tcolorbox}
@@ -226,11 +227,58 @@
     The null hypothesis and alternative hypothesis are competing claims about the data within a population which needs to be tested using the corresponding sample data. The null hypothesis is our default and is of the form of an equality. Whereas, the alternative hypothesis is what we are trying to prove is true and is of the form of a type of inequality ($<, \ne, >$). For example when trying to prove a coin-toss is unfair:
     \begin{align*}
         \text{Null Hypothesis} &= H_0 : p=0.5\\
-        \text{Alternative Hypothesis} &= H_a : p>0.5
+        \text{Alternative Hypothesis} &= H_A : p>0.5
     \end{align*}
     where $p$ is the proportion of heads (tails) for example.
 \end{tcolorbox}
 
+\begin{tcolorbox}[title=Statistical Significance]
+    A sample is more statistically significant the less likely it is to happen under the assumption that $H_0$ is true. That is, the rarer it is the more important it is as evidence for $H_A$ and against $H_0$.
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Randomization Distribution (RD)]
+    Similar to a bootstrap distribution but for operations such as calculating a $p$-value. It approximates the sampling distribution, by simulating samples of the original experiment, using a random process that follows the original data collection as closely as possible, but enforces the null hypothesis.\\
+    The closer an observed value is to being an outlier amongst the simulated values, the more statistically significant it is.
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=$p$-value]
+    The $p$-value (of a sample set in a statistical test) estimates the probability of getting a result/sample at-least as extreme as the observed sample if we assume $H_0$ is true. This is often tested by creating a randomization distribution which \textbf{must} follow the assumption that $H_0$ is true. It can be thought of as the probability that the next generated sample will be as extreme as the observed sample, meaning a low enough $p$-value shows the observed sample is more rare and hence is evidence for $H_A$ and against $H_0$.\\
+    \textbf{NOTE:} When $H_A$ is two-tailed we must double the $p$-value to account for each tail.
+
+    \begin{tcolorbox}[title=Computing $p$-values]
+        Assuming $H_0 : \pi=a$ for some parameter $\pi$ and an observed statistic $o$. $\mathbb{P}< (x)$ denotes the probability of being less-than $x$. $H_A$ is calculated differently based on its tail:
+        \begin{itemize}
+            \item Left-Tailed ($H_A:\pi<a$): The $p$-value for $o$ is $\mathbb{P} \le(o)$.
+            \item Right-Tailed ($H_A:\pi<a$): The $p$-value for $o$ is $\mathbb{P} \ge (o) = 1 - \mathbb{P} < (o)$.
+            \item Two-Tailed ($H_A:\pi<a$): We double the smaller tail:
+            \begin{itemize}
+                \item When $o<a$: $p$-value for $o$ is $2\times\mathbb{P}\le (o)$.
+                \item When $o>a$: $p$-value for $o$ is $2\times\mathbb{P} \ge (o) = 2\times( 1 - \mathbb{P} < (o))$.
+            \end{itemize}
+        \end{itemize}
+    \end{tcolorbox}
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Significance Level]
+    The significance level is a threshold we define \textbf{before} looking at data, and if the $p$-value is below this threshold then it is enough evidence to reject $H_0$ and accept $H_A$. It is usually denoted by $\alpha$. Common levels are $\alpha=0.05, \alpha=0.01, \alpha=0.1$.
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Errors]
+    Type I error is when we incorrectly reject $H_0$ for $H_A$ (this is avoided with a lower $\alpha$). Type II error is when we incorrectly accept $H_0$ (this is avoided with a higher $\alpha$).\\
+    Since Type II just states "the results were not strong enough to contradict our null/default hypothesis" it is (generally) less important to avoid these over Type I. In order to choose a significance level, you must consider
+    how serious making each error would be.
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=Methods for Generating a Randomization Distribution]
+    Common ways to generate a randomization distribution:
+    \begin{itemize}
+        \item Testing a proportion: We sample from a population with the null proportion using the sample size in the original sample.
+        \item Testing a mean: To keep the variability of the simulated samples the same as the original sample, we shift the original sample so that the mean of the shifted values is at the null mean. We sample with replacement from these shifted values to obtain a sample with the same sample size as the original sample.
+        \item Testing a difference in means: To match the null assumption of no difference between the two groups, we deal all the values randomly to the two groups, matching the two sample sizes in the original sample.
+        \item Testing a difference in proportions: To match the null assumption of no difference between the two groups, we deal all the values randomly to the two groups, matching the two sample sizes in the original sample.
+        \item Testing a correlation: To match a null hypothesis of zero correlation, we randomly assign the values of one variable to the values of the other variable.
+    \end{itemize}
+\end{tcolorbox}
 
 \pagebreak
 \section{Hypothesis Tests}
